@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('tahun_ajaran');
             $table->string('status');
             $table->date('tgl_masuk');
-            $table->date('tgl_keluar');
+            $table->date('tgl_keluar')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
