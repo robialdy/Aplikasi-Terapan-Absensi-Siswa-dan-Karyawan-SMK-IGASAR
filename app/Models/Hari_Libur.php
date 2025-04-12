@@ -9,7 +9,7 @@ class Hari_Libur extends Model
 {
     protected $table = 'hari_libur';
 
-    protected $fillable = ['tgl_mulai','tgl_selesai','keterangan'];
+    protected $fillable = ['tgl_mulai','tgl_selesai','keterangan','slug'];
 
     use SoftDeletes;
 }

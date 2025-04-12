@@ -38,22 +38,22 @@
         <ul class="menu">
             <li class="sidebar-title">Menu</li>
 
-            <li class="sidebar-item">
-                <a href="" class='sidebar-link'>
+            <li class="sidebar-item {{ request()->is('admin') ? 'active' : '' }}">
+                <a href="{{ route('dashboard.admin') }}" class='sidebar-link'>
                     <i class="bi bi-grid-fill"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
 
-            <li class="sidebar-item has-sub">
+            <li class="sidebar-item has-sub  {{ request()->is('admin/hari-libur*') ? 'active' : '' }}">
                 <p class='sidebar-link' style="cursor:pointer;">
                     <i class="bi bi-pentagon-fill"></i>
                     <span>Master Data</span>
                 </p>
 
-                <ul class="submenu ">
-                    <li class="submenu-item ">
-                        <a href="" class="submenu-link">Category</a>
+                <ul class="submenu">
+                    <li class="submenu-item {{ request()->is('admin/hari-libur*') ? 'active' : '' }}">
+                        <a href="{{ route('harilibur') }}" class="submenu-link">Hari Libur</a>
                     </li>
                 </ul>
             </li>
