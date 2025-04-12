@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 // admin
+use App\Http\Controllers\admin\MataPelajaranController;
 use App\Http\Controllers\admin\HariLiburController;
 use App\Http\Controllers\admin\DashboardController;
 
@@ -22,6 +23,18 @@ Route::prefix('admin')->group(function(){
         Route::put('update/{id}', [HariLiburController::class, 'update'])->name('harilibur.update');
         // delete
         Route::delete('delete/{id}', [HariLiburController::class, 'delete'])->name('harilibur.delete');
+    });
+    // MATA PELAJARAN
+    Route::prefix('mata-pelajaran')->group(function (){
+        Route::get('', [MataPelajaranController::class, 'index'])->name('matapelajaran');
+        // CREATE
+        Route::get('create', [MataPelajaranController::class, 'create'])->name('matapelajaran.create');
+        Route::post('store', [MataPelajaranController::class, 'store'])->name('matapelajaran.store');
+        // EDIT
+        Route::get('edit/{slug}', [MataPelajaranController::class, 'edit'])->name('matapelajaran.edit');
+        Route::put('update/{id}', [MataPelajaranController::class, 'update'])->name('matapelajaran.update');
+        // DELETE
+        Route::delete('delete/{id}', [MataPelajaranController::class, 'delete'])->name('matapelajaran.delete');
     });
 });
 

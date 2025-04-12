@@ -45,7 +45,7 @@
                 </a>
             </li>
 
-            <li class="sidebar-item has-sub  {{ request()->is('admin/hari-libur*') ? 'active' : '' }}">
+            <li class="sidebar-item has-sub  {{ request()->is('admin/hari-libur*') || request()->is('admin/mata-pelajaran*') ? 'active' : '' }}">
                 <p class='sidebar-link' style="cursor:pointer;">
                     <i class="bi bi-pentagon-fill"></i>
                     <span>Master Data</span>
@@ -54,6 +54,9 @@
                 <ul class="submenu">
                     <li class="submenu-item {{ request()->is('admin/hari-libur*') ? 'active' : '' }}">
                         <a href="{{ route('harilibur') }}" class="submenu-link">Hari Libur</a>
+                    </li>
+                    <li class="submenu-item {{ request()->is('admin/mata-pelajaran*') ? 'active' : '' }}">
+                        <a href="{{ route('matapelajaran') }}" class="submenu-link">Mata Pelajaran</a>
                     </li>
                 </ul>
             </li>
