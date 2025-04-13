@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('nama_lengkap');
+            $table->string('slug');
             $table->string('nis')->nullable();
             $table->string('nisn')->nullable();
             $table->string('ttl');
+            $table->string('no_hp');
             $table->string('nama_ayah')->nullable();
             $table->string('nama_ibu')->nullable();
             $table->integer('tahun_masuk');

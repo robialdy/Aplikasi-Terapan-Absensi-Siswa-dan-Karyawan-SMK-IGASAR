@@ -15,6 +15,8 @@
   <link rel="stylesheet" href="{{ asset('assets/compiled/css/table-datatable.css') }}">
   {{-- alert --}}
 <link rel="stylesheet" href="{{ asset('assets/extensions/sweetalert2/sweetalert2.min.css') }}">
+{{-- choicehs --}}
+  <link rel="stylesheet" href="{{ asset('assets/extensions/choices.js/public/assets/styles/choices.css') }}">
 
 </head>
 
@@ -43,6 +45,22 @@
                     <i class="bi bi-grid-fill"></i>
                     <span>Dashboard</span>
                 </a>
+            </li>
+
+            <li class="sidebar-item has-sub  {{ request()->is('admin/user*') || request()->is('admin/siswa*') ? 'active' : '' }}">
+                <a href="#" class='sidebar-link' style="cursor:pointer;">
+                    <i class="bi bi-person-fill"></i>
+                    <span>Users</span>
+                </a>
+
+                <ul class="submenu">
+                    <li class="submenu-item {{ request()->is('admin/siswa*') ? 'active' : '' }}">
+                        <a href="{{ route('siswa') }}" class="submenu-link">Siswa</a>
+                    </li>
+                    <li class="submenu-item {{ request()->is('admin/user*') ? 'active' : '' }}">
+                        <a href="{{ route('user') }}" class="submenu-link">Pengguna</a>
+                    </li>
+                </ul>
             </li>
 
             <li class="sidebar-item has-sub  {{ request()->is('admin/hari-libur*') || request()->is('admin/mata-pelajaran*') ? 'active' : '' }}">
@@ -195,6 +213,10 @@
     <script src="{{ asset('assets/static/js/pages/datatables.js') }}"></script>
     {{-- sweetalert --}}
     <script src="{{ asset('assets/extensions/sweetalert2/sweetalert2.min.js') }}"></script>
+
+    {{-- choicehes --}}
+    <script src="{{ asset('assets/extensions/choices.js/public/assets/scripts/choices.js') }}"></script>
+    <script src="{{ asset('assets/static/js/pages/form-element-select.js') }}"></script>
 
     {{-- notifikasi --}}
     <script>
