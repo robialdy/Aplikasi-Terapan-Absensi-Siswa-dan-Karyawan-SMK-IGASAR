@@ -1,4 +1,8 @@
 <?php
+use App\Http\Controllers\admin\JadwalController;
+use App\Http\Controllers\admin\KelasController;
+use App\Http\Controllers\admin\RiwayatKelasController;
+use App\Http\Controllers\admin\ScannerController;
 use App\Http\Controllers\admin\SiswaController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
@@ -12,6 +16,7 @@ use App\Http\Controllers\guru\DashboardController as GuruDashboardController;
 use App\Http\Controllers\kurikulum\DashboardController as KurikulumDashboardController;
 use App\Http\Controllers\siswa\DashboardController as SiswaDashboardController;
 use App\Http\Controllers\walikelas\DashboardController as WalikelasDashboardController;
+use App\Models\Jadwal;
 
 // walikelas
 
@@ -86,6 +91,40 @@ Route::middleware(['auth', 'role:Admin'])->group(function(){
             Route::put('update/{id}', [SiswaController::class, 'update'])->name('siswa.update');
             // delete
             Route::delete('delete/{id}', [SiswaController::class, 'delete'])->name('siswa.delete');
+        });
+        // KELAS
+        Route::prefix('kelas')->group(function(){
+            Route::get('', [KelasController::class, 'index'])->name('kelas');
+            // create
+            Route::get('create', [KelasController::class, 'create'])->name('kelas.create');
+            Route::post('store', [KelasController::class, 'store'])->name('kelas.store');
+            // edit
+            Route::get('edit/{id}', [KelasController::class, 'edit'])->name('kelas.edit');
+            Route::put('update/{id}', [KelasController::class, 'update'])->name('kelas.update');
+            // delete
+            Route::delete('delete/{id}', [KelasController::class, 'delete'])->name('kelas.delete');
+        });
+        // JADWAL
+        Route::prefix('jadwal')->group(function(){
+            Route::get('', [JadwalController::class, 'index'])->name('jadwal');
+            Route::get('{nig}', [JadwalController::class, 'guru'])->name('jadwal.first');
+            Route::get('{nig}/{id_kelas}', [JadwalController::class, 'view_table'])->name('jadwal.two');
+            // create
+            Route::post('store', [JadwalController::class, 'store'])->name('jadwal.store');
+            // edit
+            Route::get('edit/{nig}/{id_kelas}/{id_jadwal}', [JadwalController::class, 'edit'])->name('jadwal.edit');
+            Route::put('update/{id}', [JadwalController::class, 'update'])->name('jadwal.update');
+            // delete
+            Route::delete('delete/{id}', [JadwalController::class, 'delete'])->name('jadwal.delete');
+        });
+        // SCANNER
+        Route::get('scanner', [ScannerController::class, 'index'])->name('scanner');
+
+        //RIWAYAT KELAS
+        Route::prefix('riwayat-kelas')->group(function(){
+            Route::get('', [RiwayatKelasController::class, 'index'])->name('riwayatkelas');
+            // histori per kelas
+            Route::get('{id_kelas}', [RiwayatKelasController::class, 'riwayat'])->name('riwayatkelas.riwayat');
         });
     });
 });

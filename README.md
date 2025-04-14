@@ -1,66 +1,84 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+LIST BELUM DIKERJAKAN table
+- Riwayat Kelas
+- Kehadiran
+- Jadwal Kehadiran
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+LIST BELUM DIKERJAKAN fitur
 
-## About Laravel
+-- Visualisasi Data
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+DOKUMENTASI
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+contoh untuk visualisasi data jumlah
+    'kondisi' => [
+        'baik' => Asset::where('condition_asset', 'Baik')->count(),
+        'rusak_ringan' => Asset::where('condition_asset', 'Rusak Ringan')->count(),
+        'rusak_sedang' => Asset::where('condition_asset', 'Rusak Sedang')->count(),
+        'rusak_berat' => Asset::where('condition_asset', 'Rusak Berat')->count(),
+        'rusak_total' => Asset::where('condition_asset', 'Rusak Total')->count(),
+    ]
 
-## Learning Laravel
+SELECT BOX INSERT
+<form method="post" action="/simpan">
+  <input type="checkbox" name="printer_id[]" value="1"> Printer A<br>
+  <input type="checkbox" name="printer_id[]" value="2"> Printer B<br>
+  <input type="checkbox" name="printer_id[]" value="3"> Printer C<br>
+  <button type="submit">Simpan</button>
+</form>
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+$printerIds = $request->printer_id;
+$dataToInsert = [];
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+foreach ($printerIds as $id) {
+    $dataToInsert[] = [
+        'printer_id' => $id,
+        'created_at' => now(),
+        // tambahkan field lain kalau perlu
+    ];
+}
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+DB::table('nama_tabel')->insert($dataToInsert);
 
-## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+REDIRECT HARI LIBUR
 
-### Premium Partners
+1. php artisan make:middleware CekHariLibur
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+2. namespace App\Http\Middleware;
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
-## Contributing
+class CekHariLibur
+{
+    public function handle(Request $request, Closure $next)
+    {
+        $hariIni = Carbon::today();
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+        $adaLibur = DB::table('hari_libur')
+            ->whereDate('tgl_mulai', '<=', $hariIni)
+            ->whereDate('tgl_selesai', '>=', $hariIni)
+            ->exists();
 
-## Code of Conduct
+        if ($adaLibur) {
+            return redirect()->back()->with('error', 'Hari ini adalah hari libur!');
+        }
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+        return $next($request);
+    }
+}
+atau
+use App\Models\HariLibur;
+...
+HariLibur::whereDate('tgl_mulai', '<=', $hariIni)->whereDate('tgl_selesai', '>=', $hariIni)->exists();
 
-## Security Vulnerabilities
+3. Route::get('/formulir', [FormulirController::class, 'index'])->middleware('cek_hari_libur');
+atau
+public function __construct()
+{
+    $this->middleware('cek_hari_libur')->only(['create', 'store']);
+}
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

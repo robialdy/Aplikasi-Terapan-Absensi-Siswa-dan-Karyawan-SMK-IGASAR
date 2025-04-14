@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kelas;
+use App\Models\Riwayat_Kelas;
 use App\Models\Users;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -54,7 +56,8 @@ class AuthController extends Controller
     public function register()
     {
         $data = [
-            'provincys' => $this->_getCity()
+            'provincys' => $this->_getCity(),
+            'kelas' => Kelas::get(),
         ];
         return view('auth.register', $data);
     }
@@ -73,7 +76,10 @@ class AuthController extends Controller
             'nama_ibu' => 'required',
             'alamat_lengkap' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,svg|max:2048',
-            'password' => 'required|min:8|confirmed'
+            'password' => 'required|min:8|confirmed',
+            // 'kelas' => 'required',
+            'tgl_masuk' => 'required',
+            'tahun_ajaran' => 'required',
         ]);
 
         $picture_name = time() . '.' . $request->file('image')->getClientOriginalExtension();
@@ -93,8 +99,16 @@ class AuthController extends Controller
             'image' => $picture_name,
             'password' => Hash::make($request->password),
             'role' => 'Siswa',
-            'status' => 'Active',
+            'status' => 'Aktif',
             'bidang' => 'Pelajar'
+        ]);
+
+        Riwayat_Kelas::create([
+            'id_user' => $siswa->id,
+            'id_kelas' => $request->kelas,
+            'tgl_masuk' => $request->tgl_masuk,
+            'tahun_ajaran' => $request->tahun_ajaran,
+            'status' => 'Aktif',
         ]);
 
         $this->generateQrCode($siswa);

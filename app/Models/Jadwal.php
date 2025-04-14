@@ -9,7 +9,7 @@ class Jadwal extends Model
 {
     protected $table = 'jadwal';
 
-    protected $fillable = ['id_user','id_mata_pelajaran','id_kelas','jam_mulai','jam_akhir'];
+    protected $fillable = ['id_user','id_mata_pelajaran','id_kelas','jam_mulai','jam_akhir','status'];
 
     use SoftDeletes;
 

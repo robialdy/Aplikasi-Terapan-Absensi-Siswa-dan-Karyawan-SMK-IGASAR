@@ -47,6 +47,34 @@
                 </a>
             </li>
 
+            <li class="sidebar-item {{ request()->is('admin/jadwal*') ? 'active' : '' }}">
+                <a href="{{ route('jadwal') }}" class='sidebar-link'>
+                    <i class="bi bi-grid-fill"></i>
+                    <span>Jadwal</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item {{ request()->is('admin/screen*') ? 'active' : '' }}">
+                <a href="{{ route('scanner') }}" class='sidebar-link'>
+                    <i class="bi bi-grid-fill"></i>
+                    <span>Screen</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item {{ request()->is('admin/kelas*') ? 'active' : '' }}">
+                <a href="{{ route('kelas') }}" class='sidebar-link'>
+                    <i class="bi bi-grid-fill"></i>
+                    <span>Kelas</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item {{ request()->is('admin/riwayat-kelas*') ? 'active' : '' }}">
+                <a href="{{ route('riwayatkelas') }}" class='sidebar-link'>
+                    <i class="bi bi-grid-fill"></i>
+                    <span>Riwayat Kelas</span>
+                </a>
+            </li>
+
             <li class="sidebar-item has-sub  {{ request()->is('admin/user*') || request()->is('admin/siswa*') ? 'active' : '' }}">
                 <a href="#" class='sidebar-link' style="cursor:pointer;">
                     <i class="bi bi-person-fill"></i>
@@ -139,19 +167,19 @@
                                 <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
                                     <div class="user-menu d-flex">
                                         <div class="user-name text-end me-3">
-                                            <h6 class="mb-0 text-gray-600">JANCOK</h6>
-                                            <p class="mb-0 text-sm text-gray-600">JANCOK</p>
+                                            <h6 class="mb-0 text-gray-600">{{ Auth()->user()->nama_lengkap }}</h6>
+                                            <p class="mb-0 text-sm text-gray-600">{{ Auth()->user()->role }}</p>
                                         </div>
                                         <div class="user-img d-flex align-items-center">
                                             <div class="avatar avatar-md">
-                                                <img src="{{ asset('assets/static/images/picture/blank_profile.png') }}">
+                                                <img src="{{ asset('assets/images/logo/default-image.jpg') }}">
                                             </div>
                                         </div>
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="min-width: 11rem;">
                                     <li>
-                                        <h6 class="dropdown-header">Hello, JANCOK!</h6>
+                                        <h6 class="dropdown-header">Hello, {{ Auth()->user()->nama_lengkap }}!</h6>
                                     </li>
                                     <li><a class="dropdown-item" href=""><i class="bi bi-grid-fill me-2"></i>Dashboard</a></li>
                                     <li>

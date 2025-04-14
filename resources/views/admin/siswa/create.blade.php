@@ -64,13 +64,26 @@
                             @enderror
                         </div>
 
-                        <div class="form-group col-12">
+                        <div class="form-group col-6">
                             <label for="no_hp">No Handphone<span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <span class="input-group-text" id="basic-addon1">+62</span>
                                 <input type="number" class="form-control" id="no_hp" placeholder="Masukan No Hp" name="no_hp" value="{{ old('no_hp') }}">
                             </div>
                             @error('no_hp')
+                            <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label for="kelas">Kelas<span class="text-danger">*</span></label>
+                                <select name="kelas" id="kelas" class="form-select">
+                                    <option value="" selected disabled>Pilih Kelas</option>
+                                    @foreach ($kelas as $k)
+                                        <option value="{{ $k->id }}"  @if (old('kelas') == $k->id_kelas) selected @endif>{{ $k->nama_kelas }}</option>
+                                    @endforeach
+                                </select>
+                            @error('kelas')
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
@@ -112,6 +125,34 @@
                             <label for="nama_ibu">Nama Ibu<span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="nama_ibu" placeholder="Masukan Nama Ibu" name="nama_ibu" value="{{ old('nama_ibu') }}">
                             @error('nama_ibu')
+                            <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label for="tgl_masuk">Tanggal Masuk Sekolah<span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="tgl_masuk" placeholder="Masukan Tanggal Lahir" name="tgl_masuk" value="{{ old('tgl_masuk') }}">
+                            @error('tgl_masuk')
+                            <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label for="tahun_ajaran">Tahun Ajaran<span class="text-danger">*</span></label>
+                                <select name="tahun_ajaran" id="tahun_ajaran" class="form-select">
+                                    <option value="" selected disabled>Pilih Tahun Ajaran</option>
+                                    <option value="2025/2026" @if (old('tahun_ajaran') == '2025/2026') @endif>2025/2026</option>
+                                    <option value="2026/2027"@if (old('tahun_ajaran') == '2026/2027') @endif>2026/2027</option>
+                                    <option value="2027/2028" @if (old('tahun_ajaran') == '2027/2028') @endif>2027/2028</option>
+                                    <option value="2028/2029" @if (old('tahun_ajaran') == '2028/2029') @endif>2028/2029</option>
+                                    <option value="2029/2030"@if (old('tahun_ajaran') == '2029/2030') @endif>2029/2030</option>
+                                    <option value="2030/2031"@if (old('tahun_ajaran') == '2030/2031') @endif>2030/2031</option>
+                                    <option value="2031/2032"@if (old('tahun_ajaran') == '2031/2032') @endif>2031/2032</option>
+                                    <option value="2032/2033"@if (old('tahun_ajaran') == '2032/2033') @endif>2032/2033</option>
+                                    <option value="2033/2034"@if (old('tahun_ajaran') == '2033/2034') @endif>2033/2034</option>
+                                    <option value="2034/2035"@if (old('tahun_ajaran') == '2034/2035') @endif>2034/2035</option>
+                                </select>
+                            @error('tahun_ajaran')
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
