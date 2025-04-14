@@ -32,7 +32,7 @@
 
                 <div class="list-group">
                     @foreach ($kelas as $k)
-                    <a href="{{ route('jadwal.first', $k->id) }}" class="list-group-item list-group-item-action">{{ $k->nama_kelas }}</a>
+                    <a href="{{ route('riwayatkelas.riwayat', $k->id) }}" class="list-group-item list-group-item-action">{{ $k->nama_kelas }}</a>
                     @endforeach
                 </div>
 

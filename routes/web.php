@@ -125,6 +125,10 @@ Route::middleware(['auth', 'role:Admin'])->group(function(){
             Route::get('', [RiwayatKelasController::class, 'index'])->name('riwayatkelas');
             // histori per kelas
             Route::get('{id_kelas}', [RiwayatKelasController::class, 'riwayat'])->name('riwayatkelas.riwayat');
+            // Update Status
+            Route::put('{id_riwayat}/update', [RiwayatKelasController::class, 'updateStatus'])->name('riwayatkelas.updateStatus');
+            // update Kelas
+            Route::put('{id_kelas}/update/kelas', [RiwayatKelasController::class, 'updateKelas'])->name('riwayatkelas.updatekelas');
         });
     });
 });
