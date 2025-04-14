@@ -1,5 +1,4 @@
 LIST BELUM DIKERJAKAN table
-- Riwayat Kelas
 - Kehadiran
 - Jadwal Kehadiran
 

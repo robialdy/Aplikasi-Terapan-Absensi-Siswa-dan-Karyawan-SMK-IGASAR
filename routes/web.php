@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\admin\AbsensiGerbangController;
 use App\Http\Controllers\admin\JadwalController;
 use App\Http\Controllers\admin\KelasController;
 use App\Http\Controllers\admin\RiwayatKelasController;
@@ -117,8 +119,17 @@ Route::middleware(['auth', 'role:Admin'])->group(function(){
             // delete
             Route::delete('delete/{id}', [JadwalController::class, 'delete'])->name('jadwal.delete');
         });
-        // SCANNER
-        Route::get('scanner', [ScannerController::class, 'index'])->name('scanner');
+
+        // ABSENSI GERBANG
+        Route::prefix('absensi-gerbang')->group(function(){
+            Route::get('', [AbsensiGerbangController::class, 'index'])->name('absensigerbang');
+            // INSERT DATA KEHADIRAN
+            Route::post('store', [AbsensiGerbangController::class, 'store'])->name('absensigerbang.store');
+            // SCANNER
+            Route::get('scanner', [ScannerController::class, 'index'])->name('scanner');
+            Route::post('scanner/siswa', [ScannerController::class, 'scannerSiswa'])->name('scanner.siswa');
+        });
+
 
         //RIWAYAT KELAS
         Route::prefix('riwayat-kelas')->group(function(){

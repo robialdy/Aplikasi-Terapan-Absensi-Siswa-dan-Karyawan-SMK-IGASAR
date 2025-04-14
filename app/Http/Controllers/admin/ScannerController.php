@@ -11,4 +11,12 @@ class ScannerController extends Controller
     {
         return view('admin.scanner.index');
     }
+
+    public function scannerSiswa(Request $request)
+    {
+        $id_user = json_decode($request->barcode);
+
+        echo $id_user;
+    }
 }
+

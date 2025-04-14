@@ -1,68 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scan QR Code</title>
-    <!-- Menggunakan CDN dari jsDelivr -->
-    <script src="https://cdn.jsdelivr.net/npm/html5-qrcode/minified/html5-qrcode.min.js"></script>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-        }
-        video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        h1 {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            color: white;
-            z-index: 10;
-        }
-    </style>
+    <title>Scan Barcode</title>
 </head>
 <body>
-    <h1>Scan QR Code Milik Anda</h1>
+    <h1>Scan Barcode ID User</h1>
+    <video id="preview" width="400" height="300"></video>
 
-    <!-- Div untuk menampilkan video dari kamera -->
-    <div id="reader" style="width: 100%; height: 100%;"></div>
+    <div id="user-info" style="display:none;">
+        <h2>User Info</h2>
+        <p><strong>Nama:</strong> <span id="user-name"></span></p>
+        <p><strong>Email:</strong> <span id="user-email"></span></p>
+        <p><strong>Waktu Scan:</strong> <span id="scan-time"></span></p>
+    </div>
 
+    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const video = document.getElementById('reader');
+        let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+        scanner.addListener('scan', function (content) {
+                console.clear(); // biar bersih tiap scan
+                console.log("Barcode terbaca mentah:", content);
 
-            // Cek apakah browser mendukung getUserMedia
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                // Menginisialisasi Html5Qrcode
-                const html5QrCode = new Html5Qrcode("reader");
-
-                // Fungsi sukses ketika QR code terdeteksi
-                function onScanSuccess(decodedText, decodedResult) {
-                    alert(`QR Code Detected: ${decodedText}`);
+                try {
+                    const parsed = JSON.parse(content);
+                    console.log("Parsed JSON:", parsed);
+                    alert("ID User: " + parsed.id);
+                } catch (err) {
+                    console.warn("Gagal parse JSON, isi mungkin bukan JSON:", content);
+                    alert("Isi QR:", content);
                 }
+            // fetch('{{ route('scanner.siswa') }}', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //         'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            //     },
+            //     body: JSON.stringify({ barcode: content })
+            // })
+            // .then(res => res.json())
+            // .then(data => {
+            //     if (data.success) {
+            //         document.getElementById('user-info').style.display = 'block';
+            //         document.getElementById('user-name').textContent = data.user.name;
+            //         document.getElementById('user-email').textContent = data.user.email;
+            //         document.getElementById('scan-time').textContent = data.log.scanned_at;
+            //     } else {
+            //         alert(data.message || 'Scan gagal');
+            //     }
+            // });
+        });
 
-                // Fungsi error jika terjadi kesalahan dalam pemindaian
-                function onScanError(errorMessage) {
-                    console.warn(errorMessage);
-                }
-
-                // Mulai kamera dan mulai pemindaian QR code
-                html5QrCode.start(
-                    { facingMode: "environment" },
-                    { fps: 10, qrbox: 250 }, // Pengaturan FPS dan ukuran kotak pemindaian
-                    onScanSuccess,
-                    onScanError
-                ).catch(function(err) {
-                    console.error("Gagal membuka kamera:", err);
-                });
+        Instascan.Camera.getCameras().then(function (cameras) {
+            console.log(cameras);
+            if (cameras.length > 0) {
+                scanner.start(cameras[0]);
             } else {
-                alert('Your browser does not support camera access.');
+                alert('Tidak ada kamera ditemukan.');
             }
         });
     </script>

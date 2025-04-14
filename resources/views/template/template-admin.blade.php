@@ -54,10 +54,10 @@
                 </a>
             </li>
 
-            <li class="sidebar-item {{ request()->is('admin/screen*') ? 'active' : '' }}">
-                <a href="{{ route('scanner') }}" class='sidebar-link'>
+            <li class="sidebar-item {{ request()->is('admin/absensi-gerbang*') ? 'active' : '' }}">
+                <a href="{{ route('absensigerbang') }}" class='sidebar-link'>
                     <i class="bi bi-grid-fill"></i>
-                    <span>Screen</span>
+                    <span>Absensi Gerbang</span>
                 </a>
             </li>
 
