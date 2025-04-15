@@ -21,6 +21,7 @@ use App\Http\Controllers\kurikulum\DashboardController as KurikulumDashboardCont
 use App\Http\Controllers\siswa\DashboardController as SiswaDashboardController;
 use App\Http\Controllers\siswa\QrCodeController;
 use App\Http\Controllers\walikelas\DashboardController as WalikelasDashboardController;
+use App\Http\Controllers\guru\UserController as GuruUserController;
 use App\Models\Jadwal;
 
 // walikelas
@@ -164,8 +165,21 @@ Route::middleware(['auth', 'role:Guru/Karyawan'])->group(function () {
             Route::get('create/{id_kelas}/{id_jadwal}', [AbsensiKelasController::class, 'create'])->name('absensikelas.create');
             Route::post('store', [AbsensiKelasController::class, 'store'])->name('absensikelas.store');
         });
-        // kelola karyawan/guru/walikelas
-
+        // form tidak hadir
+        Route::get('form-tidak-hadir', [AbsensiKelasController::class, 'form_tidak_hadir'])->name('form.tidak-hadir');
+        Route::post('form-submit', [AbsensiKelasController::class, 'form_submit'])->name('form.submit');
+        // kelola guru/karyawan
+        Route::prefix('user')->group(function(){
+            Route::get('', [GuruUserController::class, 'index'])->name('guru.user');
+            // create
+            Route::get('create', [GuruUserController::class, 'create'])->name('guru.user.create');
+            Route::post('store', [GuruUserController::class, 'store'])->name('guru.user.store');
+            // edit
+            Route::get('edit/{slug}', [GuruUserController::class, 'edit'])->name('guru.user.edit');
+            Route::put('update/{id}', [GuruUserController::class, 'update'])->name('guru.user.update');
+            // delete
+            Route::delete('delete/{id}', [GuruUserController::class, 'delete'])->name('guru.user.delete');
+        });
     });
 });
 

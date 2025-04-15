@@ -10,6 +10,7 @@ use App\Models\Riwayat_Kelas;
 use App\Models\Jadwal_Kehadiran;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class AbsensiKelasController extends Controller
 {
@@ -21,14 +22,25 @@ class AbsensiKelasController extends Controller
             'jadwal' => Jadwal::where('id_user', Auth::user()->id)->get()
         ];
 
-        // update status jadwal agar kebuka lagi
+
         foreach ($data['jadwal'] as $j) {
-            if (date('H:i:s') >= $j->jam_mulai && date('H:i:s') <= $j->jam_akhir) {
+            $sudahAbsenHariIni = \App\Models\Jadwal_Kehadiran::where('id_jadwal', $j->id)
+                ->whereDate('created_at', Carbon::today())
+                ->exists();
+
+            if (
+                !$sudahAbsenHariIni &&
+                date('H:i:s') >= $j->jam_mulai &&
+                date('H:i:s') <= $j->jam_akhir
+            ) {
                 Jadwal::where('id', $j->id)->update([
                     'status' => 'Aktif'
                 ]);
+            } else {
+                // Optional: kalau jadwal sudah lewat dan belum absen, bisa reset ke Nonaktif
+                // Jadwal::where('id', $j->id)->update(['status' => 'Nonaktif']);
             }
-        };
+        }
 
 
         return view('guru.absensi_kelas.index', $data);
@@ -54,7 +66,19 @@ class AbsensiKelasController extends Controller
             // buat nyimpen id di jadwal_kehadiran
             $kehadiranSiswa = Kehadiran::where('id_user', $id_siswa[$index])->where('tanggal', date('Y-m-d'))->first();
 
-            if($st != 'Masuk') {
+            // update tidak hadir
+            if ($st == 'Sakit' || $st == 'Izin' || $st == 'Alpa') {
+                $kehadiran = Kehadiran::create([
+                    'id_user' => $id_siswa[$index],
+                    'tanggal' => date('Y-m-d'),
+                    'status' => $st
+                ]);
+            }
+
+            // di null in
+            if($st != 'Masuk' && $st != 'Dispensasi' ) {
+                $kehadiranSiswa = $kehadiran->id;
+            } elseif ($st == 'Dispensasi') {
                 $kehadiranSiswa = null;
             } else {
                 $kehadiranSiswa = $kehadiranSiswa->id;
@@ -68,19 +92,42 @@ class AbsensiKelasController extends Controller
             ]);
         }
         // ABSEN GURU, KARYAWAN, WALIKELAS
-        $kehadiranGKW = Kehadiran::where('id_user', Auth::user()->id)->where('tanggal', date('Y-m-d'))->first();
+        // $kehadiranGKW = Kehadiran::where('id_user', Auth::user()->id)->where('tanggal', date('Y-m-d'))->first();
 
-        Jadwal_Kehadiran::create([
-            'id_kehadiran' => $kehadiranGKW->id,
-            'id_jadwal' => $request->id_jadwal,
-            'waktu_absen' => date('H:i:s'),
-            'status' => 'Masuk'
-        ]);
+        // Jadwal_Kehadiran::create([
+        //     'id_kehadiran' => $kehadiranGKW->id,
+        //     'id_jadwal' => $request->id_jadwal,
+        //     'waktu_absen' => date('H:i:s'),
+        //     'status' => 'Masuk'
+        // ]);
 
         Jadwal::where('id', $request->id_jadwal)->update([
             'status' => 'Selesai'
         ]);
 
         return redirect()->route('absensikelas')->with('success', 'Absensi Sukses!');
+    }
+
+    public function form_tidak_hadir()
+    {
+        $data = [
+            'title' => 'Form Tidak Hadir',
+        ];
+        return view('guru.tidak_hadir.index', $data);
+    }
+
+    public function form_submit(Request $request)
+    {
+        $request->validate([
+            'tidak_hadir' => 'required',
+        ]);
+
+        Kehadiran::create([
+            'id_user' => Auth::user()->id,
+            'tanggal' => Date('Y-m-d'),
+            'status' => $request->tidak_hadir,
+        ]);
+
+        return redirect()->back()->with('success', 'Absensi Sukses!');
     }
 }

@@ -47,10 +47,24 @@
                 </a>
             </li>
 
+
+            <li class="sidebar-item {{ request()->is('guru/guru-karyawan*') ? 'active' : '' }}">
+                <a href="{{ route('guru.user') }}" class='sidebar-link'>
+                    <i class="bi bi-grid-fill"></i>
+                    <span>Guru/Karyawan</span>
+                </a>
+            </li>
             <li class="sidebar-item {{ request()->is('guru/absensi-kelas*') ? 'active' : '' }}">
                 <a href="{{ route('absensikelas') }}" class='sidebar-link'>
                     <i class="bi bi-grid-fill"></i>
                     <span>Absensi Kelas</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item {{ request()->is('guru/form-tidak-hadir*') ? 'active' : '' }}">
+                <a href="{{ route('form.tidak-hadir') }}" class='sidebar-link'>
+                    <i class="bi bi-grid-fill"></i>
+                    <span>Form Tidak Hadir</span>
                 </a>
             </li>
 

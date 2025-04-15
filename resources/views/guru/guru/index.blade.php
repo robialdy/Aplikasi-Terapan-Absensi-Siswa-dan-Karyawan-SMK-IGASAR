@@ -1,19 +1,19 @@
-@extends('template.template-admin')
+@extends('template.template-guru')
 
 @section('title', $title)
 
 @section('content')
 
-    <div class="page-title">
+ <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>Hari Libur</h3>
+                <h3>Guru/Karyawan</h3>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard.admin') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Hari Libur</li>
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard.guru') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Guru/Karyawan</li>
                     </ol>
                 </nav>
             </div>
@@ -21,7 +21,7 @@
     </div>
 
 <div class="text-end mb-3">
-    <a href="{{ route('user.create') }}" type="button" class="btn btn-primary">
+    <a href="{{ route('guru.user.create') }}" type="button" class="btn btn-primary">
         Tambah Pengguna
     </a>
 </div>
@@ -67,10 +67,10 @@
                                 <td>{{ $user->alamat_lengkap }}</td>
                                 <td>{{ $user->role }}</td>
                                 <td>
-                                    <a href="{{ route('user.edit', $user->slug) }}" class="text-primary" style="display: inline-block; vertical-align: middle;">
+                                    <a href="{{ route('guru.user.edit', $user->slug) }}" class="text-primary" style="display: inline-block; vertical-align: middle;">
                                         <i class="bi bi-pencil-square fs-4"></i>
                                     </a>
-                                    <form action="{{ route('user.delete', $user->id) }}" method="POST" onsubmit="return confirm('User akan dihapus yakin?')" style="display: inline-block; vertical-align: middle; margin: 0;">
+                                    <form action="{{ route('guru.user.delete', $user->id) }}" method="POST" onsubmit="return confirm('User akan dihapus yakin?')" style="display: inline-block; vertical-align: middle; margin: 0;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn p-0 text-danger border-0 bg-transparent">
@@ -88,5 +88,6 @@
         </div>
 
     </section>
+
 
 @endsection

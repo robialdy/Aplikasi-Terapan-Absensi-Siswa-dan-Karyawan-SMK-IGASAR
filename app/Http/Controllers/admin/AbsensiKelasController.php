@@ -9,6 +9,7 @@ use App\Models\Kelas;
 use App\Models\Mata_Pelajaran;
 use App\Models\Riwayat_Kelas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AbsensiKelasController extends Controller
 {
