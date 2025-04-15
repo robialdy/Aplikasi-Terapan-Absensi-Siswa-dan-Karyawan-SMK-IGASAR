@@ -27,8 +27,8 @@
     <div class="sidebar-header position-relative">
         <div class="d-flex justify-content-between align-items-center">
         <div class="logo flex items-center space-x-2">
-            <img src="" alt="logo" style="width: 40px; height: 40px; object-fit: cover;">
-            <a href="index.html" class="text-sm font-semibold">IGAPIN</a>
+            <img src="{{ asset('assets/images/logo/logo.png') }}" alt="logo" style="width: 40px; height: 40px; object-fit: cover;">
+            <a href="{{ route('dashboard.siswa') }}" class="fs-5 fw-bold">ABSENSI IGAPIN</a>
         </div>
 
             <div class="sidebar-toggler  x">
@@ -40,10 +40,23 @@
         <ul class="menu">
             <li class="sidebar-title">Menu</li>
 
-            <li class="sidebar-item {{ request()->is('admin') ? 'active' : '' }}">
+            <li class="sidebar-item {{ request()->is('kurikulum') ? 'active' : '' }}">
                 <a href="{{ route('dashboard.kurikulum') }}" class='sidebar-link'>
                     <i class="bi bi-grid-fill"></i>
                     <span>Dashboard</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item {{ request()->is('kurikulum/mata-pelajaran*') ? 'active' : '' }}">
+                <a href="{{ route('kurikulum.matapelajaran') }}" class='sidebar-link'>
+                    <i class="bi bi-grid-fill"></i>
+                    <span>Mata Pelajaran</span>
+                </a>
+            </li>
+            <li class="sidebar-item {{ request()->is('kurikulum/jadwal*') ? 'active' : '' }}">
+                <a href="{{ route('kurikulum.jadwal') }}" class='sidebar-link'>
+                    <i class="bi bi-grid-fill"></i>
+                    <span>Jadwal</span>
                 </a>
             </li>
 
@@ -112,7 +125,7 @@
                                         </div>
                                         <div class="user-img d-flex align-items-center">
                                             <div class="avatar avatar-md">
-                                                <img src="{{ asset('assets/static/images/picture/blank_profile.png') }}">
+                                                <img src="{{ asset('assets/images/logo/default-image.jpg') }}">
                                             </div>
                                         </div>
                                     </div>
@@ -126,7 +139,8 @@
                                         <hr class="dropdown-divider">
                                     </li>
                                     <li>
-                                        <form action="">
+                                        <form action="{{ route('auth.logout') }}" method="post">
+                                            @csrf
                                             <button type="submit" class="btn btn-link ms-2"><i
                                                 class="icon-mid bi bi-box-arrow-left me-2"></i> Logout</button>
                                         </form>

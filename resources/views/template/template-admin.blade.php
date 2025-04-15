@@ -27,8 +27,8 @@
     <div class="sidebar-header position-relative">
         <div class="d-flex justify-content-between align-items-center">
         <div class="logo flex items-center space-x-2">
-            <img src="" alt="logo" style="width: 40px; height: 40px; object-fit: cover;">
-            <a href="index.html" class="text-sm font-semibold">IGAPIN</a>
+            <img src="{{ asset('assets/images/logo/logo.png') }}" alt="logo" style="width: 40px; height: 40px; object-fit: cover;">
+            <a href="{{ route('dashboard.siswa') }}" class="fs-5 fw-bold">ABSENSI IGAPIN</a>
         </div>
 
             <div class="sidebar-toggler  x">

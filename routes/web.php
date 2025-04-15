@@ -3,8 +3,10 @@
 use App\Http\Controllers\admin\AbsensiGerbangController;
 use App\Http\Controllers\admin\AbsensiKelasController as AdminAbsensiKelasController;
 use App\Http\Controllers\admin\JadwalController;
+use App\Http\Controllers\kurikulum\JadwalController as KurikulumJadwalController;
 use App\Http\Controllers\admin\KelasController;
 use App\Http\Controllers\admin\RiwayatKelasController;
+use App\Http\Controllers\walikelas\RiwayatKelasController as WalikelasRiwayatKelasController;
 use App\Http\Controllers\admin\ScannerController;
 use App\Http\Controllers\admin\SiswaController;
 use App\Http\Controllers\AuthController;
@@ -27,6 +29,7 @@ use App\Models\Jadwal;
 // walikelas
 
 // kurikulum
+use App\Http\Controllers\kurikulum\MataPelajaranController as KurikulumMataPelajaranController;
 
 // siswa
 
@@ -187,6 +190,31 @@ Route::middleware(['auth', 'role:Guru/Karyawan'])->group(function () {
 Route::middleware(['auth', 'role:Kurikulum'])->group(function () {
     Route::prefix('kurikulum')->group(function () {
         Route::get('', [KurikulumDashboardController::class, 'index'])->name('dashboard.kurikulum');
+        // mata pelajaran
+        Route::prefix('mata-pelajaran')->group(function () {
+            Route::get('', [KurikulumMataPelajaranController::class, 'index'])->name('kurikulum.matapelajaran');
+            // CREATE
+            Route::get('create', [KurikulumMataPelajaranController::class, 'create'])->name('kurikulum.matapelajaran.create');
+            Route::post('store', [KurikulumMataPelajaranController::class, 'store'])->name('kurikulum.matapelajaran.store');
+            // EDIT
+            Route::get('edit/{slug}', [KurikulumMataPelajaranController::class, 'edit'])->name('kurikulum.matapelajaran.edit');
+            Route::put('update/{id}', [KurikulumMataPelajaranController::class, 'update'])->name('kurikulum.matapelajaran.update');
+            // DELETE
+            Route::delete('delete/{id}', [KurikulumMataPelajaranController::class, 'delete'])->name('kurikulum.matapelajaran.delete');
+        });
+        // jadwal
+        Route::prefix('jadwal')->group(function () {
+            Route::get('', [KurikulumJadwalController::class, 'index'])->name('kurikulum.jadwal');
+            Route::get('{nig}', [KurikulumJadwalController::class, 'guru'])->name('kurikulum.jadwal.first');
+            Route::get('{nig}/{id_kelas}', [KurikulumJadwalController::class, 'view_table'])->name('kurikulum.jadwal.two');
+            // create
+            Route::post('store', [KurikulumJadwalController::class, 'store'])->name('kurikulum.jadwal.store');
+            // edit
+            Route::get('edit/{nig}/{id_kelas}/{id_jadwal}', [KurikulumJadwalController::class, 'edit'])->name('kurikulum.jadwal.edit');
+            Route::put('update/{id}', [KurikulumJadwalController::class, 'update'])->name('kurikulum.jadwal.update');
+            // delete
+            Route::delete('delete/{id}', [KurikulumJadwalController::class, 'delete'])->name('kurikulum.jadwal.delete');
+        });
     });
 });
 
@@ -202,5 +230,15 @@ Route::middleware(['auth', 'role:Siswa'])->group(function () {
 Route::middleware(['auth', 'role:Walikelas'])->group(function () {
     Route::prefix('walikelas')->group(function () {
         Route::get('', [WalikelasDashboardController::class, 'index'])->name('dashboard.walikelas');
+        //RIWAYAT KELAS
+        Route::prefix('riwayat-kelas')->group(function () {
+            Route::get('', [WalikelasRiwayatKelasController::class, 'index'])->name('walikelas.riwayatkelas');
+            // histori per kelas
+            Route::get('{id_kelas}', [WalikelasRiwayatKelasController::class, 'riwayat'])->name('walikelas.riwayatkelas.riwayat');
+            // Update Status
+            Route::put('{id_riwayat}/update', [WalikelasRiwayatKelasController::class, 'updateStatus'])->name('walikelas.riwayatkelas.updateStatus');
+            // update Kelas
+            Route::put('{id_kelas}/update/kelas', [WalikelasRiwayatKelasController::class, 'updateKelas'])->name('walikelas.riwayatkelas.updatekelas');
+        });
     });
 });
