@@ -13,6 +13,7 @@ use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\MataPelajaranController;
 use App\Http\Controllers\admin\HariLiburController;
 use App\Http\Controllers\admin\DashboardController;
+use App\Http\Controllers\guru\AbsensiKelasController;
 // guru
 use App\Http\Controllers\guru\DashboardController as GuruDashboardController;
 use App\Http\Controllers\kurikulum\DashboardController as KurikulumDashboardController;
@@ -148,6 +149,14 @@ Route::middleware(['auth', 'role:Admin'])->group(function(){
 Route::middleware(['auth', 'role:Guru/Karyawan'])->group(function () {
     Route::prefix('guru')->group(function () {
         Route::get('', [GuruDashboardController::class, 'index'])->name('dashboard.guru');
+        // absensi kelas
+        Route::prefix('absensi-kelas')->group(function(){
+            Route::get('', [AbsensiKelasController::class, 'index'])->name('absensikelas');
+            // tambah absen
+            Route::get('create/{id_kelas}/{id_jadwal}', [AbsensiKelasController::class, 'create'])->name('absensikelas.create');
+            Route::post('store', [AbsensiKelasController::class, 'store'])->name('absensikelas.store');
+        });
+
     });
 });
 

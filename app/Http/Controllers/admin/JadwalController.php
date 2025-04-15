@@ -66,7 +66,7 @@ class JadwalController extends Controller
             'id_mata_pelajaran' => $request->mapel,
             'jam_mulai' => $jam_mulai,
             'jam_akhir' => $jam_akhir,
-            'status' => 'Active'
+            'status' => 'Menunggu Jam'
         ]);
 
         return redirect()->back()->with('success', 'Jadwal berhasil dibuat!');
