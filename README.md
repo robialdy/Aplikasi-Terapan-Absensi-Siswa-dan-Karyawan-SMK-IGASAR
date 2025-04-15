@@ -3,7 +3,7 @@ LIST BELUM DIKERJAKAN table
 LIST BELUM DIKERJAKAN fitur
 
 -- Visualisasi Data
--- KEBUTUHAN FUNGSIONAL PARA AKTOR (Siswa, Guru/Karyawan, 'Kurikulum', 'Walikelas)
+-- KEBUTUHAN FUNGSIONAL PARA AKTOR (Guru/Karyawan, 'Kurikulum', 'Walikelas)
 -- ABSENSI GURU/KARYAWAN TIDAK HADIR
 -- GENERATE LAPORAN ALL AKTOR
 

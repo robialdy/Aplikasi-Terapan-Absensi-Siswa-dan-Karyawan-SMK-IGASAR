@@ -30,10 +30,6 @@ class AbsensiKelasController extends Controller
             }
         };
 
-        // update guru tidak hadir  //mencari waktu paling awal dan paling akhir lalu bandingkan dengan waktu skrng
-        $jam_mulai = '';
-        $jam_akhir = '';
-
 
         return view('guru.absensi_kelas.index', $data);
     }

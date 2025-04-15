@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\AbsensiGerbangController;
+use App\Http\Controllers\admin\AbsensiKelasController as AdminAbsensiKelasController;
 use App\Http\Controllers\admin\JadwalController;
 use App\Http\Controllers\admin\KelasController;
 use App\Http\Controllers\admin\RiwayatKelasController;
@@ -138,6 +139,16 @@ Route::middleware(['auth', 'role:Admin'])->group(function(){
             Route::put('{id_riwayat}/update', [RiwayatKelasController::class, 'updateStatus'])->name('riwayatkelas.updateStatus');
             // update Kelas
             Route::put('{id_kelas}/update/kelas', [RiwayatKelasController::class, 'updateKelas'])->name('riwayatkelas.updatekelas');
+        });
+
+        // ABSENSI KELAS
+        Route::prefix('absensi-kelas')->group(function(){
+            // detail absensi
+            Route::get('detail/{id_kehadiran}', [AdminAbsensiKelasController::class, 'detail'])->name('absensikelas.absensiswa.detail');
+            Route::get('', [AdminAbsensiKelasController::class, 'index'])->name('absensikelas.admin');
+            // absensi_kelas
+            Route::get('{id_kelas}', [AdminAbsensiKelasController::class, 'absensi'])->name('absensikelas.absensi.admin');
+            Route::get('{id_kelas}/{id_user}', [AdminAbsensiKelasController::class, 'absensi_siswa'])->name('absensikelas.absensisiswa.admin');
         });
     });
 });

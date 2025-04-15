@@ -61,6 +61,13 @@
                 </a>
             </li>
 
+            <li class="sidebar-item {{ request()->is('admin/absensi-kelas*') ? 'active' : '' }}">
+                <a href="{{ route('absensikelas.admin') }}" class='sidebar-link'>
+                    <i class="bi bi-grid-fill"></i>
+                    <span>Absensi Kelas</span>
+                </a>
+            </li>
+
             <li class="sidebar-item {{ request()->is('admin/kelas*') ? 'active' : '' }}">
                 <a href="{{ route('kelas') }}" class='sidebar-link'>
                     <i class="bi bi-grid-fill"></i>
