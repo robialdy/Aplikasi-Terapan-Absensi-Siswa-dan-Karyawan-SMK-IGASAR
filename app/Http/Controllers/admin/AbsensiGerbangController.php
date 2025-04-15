@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Users;
 use App\Models\Kehadiran;
-use App\Models\Riwayat_Kelas;
 use Illuminate\Http\Request;
+use App\Models\Riwayat_Kelas;
+use App\Http\Controllers\Controller;
 
 class AbsensiGerbangController extends Controller
 {
@@ -14,7 +15,8 @@ class AbsensiGerbangController extends Controller
         $data = [
             'title' => 'Absensi Gerbang',
             'siswa' => Riwayat_Kelas::where('status', 'Aktif')->get(),
-            'kehadiran' => Kehadiran::orderBy('created_at', 'desc')->get()
+            'kehadiran' => Kehadiran::orderBy('created_at', 'desc')->get(),
+            'guru' => Users::whereIn('role', ['Guru/Karyawan', 'Walikelas'])->get(),
         ];
         return view('admin.absensi_gerbang.index', $data);
     }
@@ -22,9 +24,10 @@ class AbsensiGerbangController extends Controller
     public function store(Request $request)
     {
         Kehadiran::create([
-            'id_user' => $request->id_siswa,
+            'id_user' => $request->id_user,
             'datang_pukul' => date('H:i:s'),
-            'tanggal' => date('Y-m-d')
+            'tanggal' => date('Y-m-d'),
+            'status' => 'Masuk',
         ]);
 
         return redirect()->back()->with('success', 'Absensi Sukses!');

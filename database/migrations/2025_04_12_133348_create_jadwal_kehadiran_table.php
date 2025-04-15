@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('jadwal_kehadiran', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_kehadiran')->constrained('kehadiran')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('id_kehadiran')->nullable()->constrained('kehadiran')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('id_jadwal')->constrained('jadwal')->onDelete('cascade')->onUpdate('cascade');
-            $table->time('waktu_absen');
+            $table->time('waktu_absen')->nullable();
             $table->string('status');
             $table->timestamps();
             $table->softDeletes();

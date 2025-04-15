@@ -75,6 +75,13 @@
                 </a>
             </li>
 
+            <li class="sidebar-item {{ request()->is('admin/laporan*') ? 'active' : '' }}">
+                <a href="" class='sidebar-link'>
+                    <i class="bi bi-grid-fill"></i>
+                    <span>Laporan</span>
+                </a>
+            </li>
+
             <li class="sidebar-item has-sub  {{ request()->is('admin/user*') || request()->is('admin/siswa*') ? 'active' : '' }}">
                 <a href="#" class='sidebar-link' style="cursor:pointer;">
                     <i class="bi bi-person-fill"></i>
@@ -186,7 +193,8 @@
                                         <hr class="dropdown-divider">
                                     </li>
                                     <li>
-                                        <form action="">
+                                        <form action="{{ route('auth.logout') }}" method="post">
+                                            @csrf
                                             <button type="submit" class="btn btn-link ms-2"><i
                                                 class="icon-mid bi bi-box-arrow-left me-2"></i> Logout</button>
                                         </form>

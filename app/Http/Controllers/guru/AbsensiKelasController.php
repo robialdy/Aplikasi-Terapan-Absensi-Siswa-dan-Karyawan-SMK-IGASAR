@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\guru;
 
+use App\Models\Users;
 use App\Models\Jadwal;
-use App\Models\Jadwal_Kehadiran;
 use App\Models\Kehadiran;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\Riwayat_Kelas;
+use App\Models\Jadwal_Kehadiran;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class AbsensiKelasController extends Controller
@@ -29,6 +30,11 @@ class AbsensiKelasController extends Controller
             }
         };
 
+        // update guru tidak hadir  //mencari waktu paling awal dan paling akhir lalu bandingkan dengan waktu skrng
+        $jam_mulai = '';
+        $jam_akhir = '';
+
+
         return view('guru.absensi_kelas.index', $data);
     }
 
@@ -47,16 +53,34 @@ class AbsensiKelasController extends Controller
         $status = $request->input('status');
         $id_siswa = $request->input('id_siswa');
 
+        // ABSEN SISWA
         foreach($status as $index => $st) {
             // buat nyimpen id di jadwal_kehadiran
             $kehadiranSiswa = Kehadiran::where('id_user', $id_siswa[$index])->where('tanggal', date('Y-m-d'))->first();
+
+            if($st != 'Masuk') {
+                $kehadiranSiswa = null;
+            } else {
+                $kehadiranSiswa = $kehadiranSiswa->id;
+            }
+
             Jadwal_Kehadiran::create([
-                'id_kehadiran' => $kehadiranSiswa->id,
+                'id_kehadiran' => $kehadiranSiswa,
                 'id_jadwal' => $request->id_jadwal,
                 'waktu_absen' => date('H:i:s'),
                 'status' => $st
             ]);
         }
+        // ABSEN GURU, KARYAWAN, WALIKELAS
+        $kehadiranGKW = Kehadiran::where('id_user', Auth::user()->id)->where('tanggal', date('Y-m-d'))->first();
+
+        Jadwal_Kehadiran::create([
+            'id_kehadiran' => $kehadiranGKW->id,
+            'id_jadwal' => $request->id_jadwal,
+            'waktu_absen' => date('H:i:s'),
+            'status' => 'Masuk'
+        ]);
+
         Jadwal::where('id', $request->id_jadwal)->update([
             'status' => 'Selesai'
         ]);

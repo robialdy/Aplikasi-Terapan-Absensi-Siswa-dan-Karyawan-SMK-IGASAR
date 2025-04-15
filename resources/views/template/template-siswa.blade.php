@@ -47,6 +47,13 @@
                 </a>
             </li>
 
+            <li class="sidebar-item {{ request()->is('data-diri') ? 'active' : '' }}">
+                <a href="{{ route('qrcode.user') }}" class='sidebar-link'>
+                    <i class="bi bi-grid-fill"></i>
+                    <span>Data Diri</span>
+                </a>
+            </li>
+
         </ul>
     </div>
 </div>
@@ -126,7 +133,8 @@
                                         <hr class="dropdown-divider">
                                     </li>
                                     <li>
-                                        <form action="">
+                                        <form action="{{ route('auth.logout') }}" method="post">
+                                            @csrf
                                             <button type="submit" class="btn btn-link ms-2"><i
                                                 class="icon-mid bi bi-box-arrow-left me-2"></i> Logout</button>
                                         </form>

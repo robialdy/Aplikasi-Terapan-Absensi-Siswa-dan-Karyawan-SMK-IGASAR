@@ -18,6 +18,7 @@ use App\Http\Controllers\guru\AbsensiKelasController;
 use App\Http\Controllers\guru\DashboardController as GuruDashboardController;
 use App\Http\Controllers\kurikulum\DashboardController as KurikulumDashboardController;
 use App\Http\Controllers\siswa\DashboardController as SiswaDashboardController;
+use App\Http\Controllers\siswa\QrCodeController;
 use App\Http\Controllers\walikelas\DashboardController as WalikelasDashboardController;
 use App\Models\Jadwal;
 
@@ -36,11 +37,7 @@ Route::prefix('auth')->group(function(){
     Route::get('register', [AuthController::class, 'register'])->name('auth.register');
     Route::post('register/store', [AuthController::class, 'registerStore'])->name('auth.register.store');
     // logout
-    Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');
-});
-
-Route::get('/', function () {
-    return view('welcome');
+    Route::post('logout', [AuthController::class, 'logout'])->name('auth.logout');
 });
 
 // ADMIN
@@ -156,6 +153,7 @@ Route::middleware(['auth', 'role:Guru/Karyawan'])->group(function () {
             Route::get('create/{id_kelas}/{id_jadwal}', [AbsensiKelasController::class, 'create'])->name('absensikelas.create');
             Route::post('store', [AbsensiKelasController::class, 'store'])->name('absensikelas.store');
         });
+        // kelola karyawan/guru/walikelas
 
     });
 });
@@ -169,9 +167,10 @@ Route::middleware(['auth', 'role:Kurikulum'])->group(function () {
 
 // SISWA
 Route::middleware(['auth', 'role:Siswa'])->group(function () {
-    Route::prefix('siswa')->group(function () {
-        Route::get('', [SiswaDashboardController::class, 'index'])->name('dashboard.siswa');
-    });
+    Route::get('/', [SiswaDashboardController::class, 'index'])->name('dashboard.siswa');
+    // my qr code
+    Route::get('data-diri', [QrCodeController::class, 'index'])->name('qrcode.user');
+
 });
 
 // WALIKELAS

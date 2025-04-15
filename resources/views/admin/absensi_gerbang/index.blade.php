@@ -39,10 +39,14 @@
                 <form action="{{ route('absensigerbang.store') }}" method="POST">
                     @csrf
                 <div class="form-group">
-                    <select name="id_siswa" id="id_siswa" class="form-control form-control-lg choices" required autofocus>
+                    <select name="id_user" id="id_siswa" class="form-control form-control-lg choices" required autofocus>
                         <option value="" selected disabled>Pilih Nama Anda</option>
                         @foreach ($siswa as $s)
                             <option value="{{ $s->id_user }}">{{ $s->siswa->nama_lengkap }} - {{ $s->kelas->nama_kelas }}</option>
+                        @endforeach
+                        {{-- guru karyawan sama walikelas --}}
+                        @foreach ($guru as $g)
+                            <option value="{{ $g->id }}">{{ $g->nama_lengkap }} - {{ $g->role }}</option>
                         @endforeach
                     </select>
                 </div>
