@@ -98,6 +98,7 @@
                                     </li>
                                     <li>
                                         <form action="{{ route('auth.logout') }}" method="post">
+                                            @csrf
                                             <button type="submit" class="btn btn-link ms-2"><i
                                                 class="icon-mid bi bi-box-arrow-left me-2"></i> Logout</button>
                                         </form>

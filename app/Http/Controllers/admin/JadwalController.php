@@ -31,8 +31,9 @@ class JadwalController extends Controller
 
     public function view_table($nig, $id_kelas)
     {
-        $guru = Users::where('role', 'Guru/Karyawan')->where('nig', $nig)->firstOrFail();
-        $kelas = Kelas::where('id', $id_kelas)->firstOrFail();
+
+        $guru = Users::where('nig', $nig)->first();
+        $kelas = Kelas::where('id', $id_kelas)->first();
 
         $data = [
             'title' => 'Table Jadwal',

@@ -49,42 +49,42 @@
 
             <li class="sidebar-item {{ request()->is('admin/jadwal*') ? 'active' : '' }}">
                 <a href="{{ route('jadwal') }}" class='sidebar-link'>
-                    <i class="bi bi-grid-fill"></i>
+                    <i class="bi bi-calendar-event-fill"></i>
                     <span>Jadwal</span>
                 </a>
             </li>
 
             <li class="sidebar-item {{ request()->is('admin/absensi-gerbang*') ? 'active' : '' }}">
                 <a href="{{ route('absensigerbang') }}" class='sidebar-link'>
-                    <i class="bi bi-grid-fill"></i>
+                    <i class="bi bi-door-open-fill"></i>
                     <span>Absensi Gerbang</span>
                 </a>
             </li>
 
             <li class="sidebar-item {{ request()->is('admin/absensi-kelas*') ? 'active' : '' }}">
                 <a href="{{ route('absensikelas.admin') }}" class='sidebar-link'>
-                    <i class="bi bi-grid-fill"></i>
-                    <span>Absensi Kelas</span>
+                    <i class="bi bi-check2-square"></i>
+                    <span>Track Absensi Kelas</span>
                 </a>
             </li>
 
             <li class="sidebar-item {{ request()->is('admin/kelas*') ? 'active' : '' }}">
                 <a href="{{ route('kelas') }}" class='sidebar-link'>
-                    <i class="bi bi-grid-fill"></i>
+                    <i class="bi bi-house-door-fill"></i>
                     <span>Kelas</span>
                 </a>
             </li>
 
             <li class="sidebar-item {{ request()->is('admin/riwayat-kelas*') ? 'active' : '' }}">
                 <a href="{{ route('riwayatkelas') }}" class='sidebar-link'>
-                    <i class="bi bi-grid-fill"></i>
+                    <i class="bi bi-clock-history"></i>
                     <span>Riwayat Kelas</span>
                 </a>
             </li>
 
             <li class="sidebar-item {{ request()->is('admin/laporan*') ? 'active' : '' }}">
-                <a href="" class='sidebar-link'>
-                    <i class="bi bi-grid-fill"></i>
+                <a href="{{ route('laporan') }}" class='sidebar-link'>
+                    <i class="bi bi-file-earmark-text-fill"></i>
                     <span>Laporan</span>
                 </a>
             </li>
@@ -112,9 +112,9 @@
                 </p>
 
                 <ul class="submenu">
-                    <li class="submenu-item {{ request()->is('admin/hari-libur*') ? 'active' : '' }}">
+                    {{-- <li class="submenu-item {{ request()->is('admin/hari-libur*') ? 'active' : '' }}">
                         <a href="{{ route('harilibur') }}" class="submenu-link">Hari Libur</a>
-                    </li>
+                    </li> --}}
                     <li class="submenu-item {{ request()->is('admin/mata-pelajaran*') ? 'active' : '' }}">
                         <a href="{{ route('matapelajaran') }}" class="submenu-link">Mata Pelajaran</a>
                     </li>

@@ -23,6 +23,7 @@ class AbsensiGerbangController extends Controller
 
     public function store(Request $request)
     {
+        $id_user = json_decode($request->id_user);
         Kehadiran::create([
             'id_user' => $request->id_user,
             'datang_pukul' => date('H:i:s'),

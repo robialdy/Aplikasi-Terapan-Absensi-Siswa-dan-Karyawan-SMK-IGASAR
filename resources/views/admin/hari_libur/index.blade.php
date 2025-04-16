@@ -21,8 +21,8 @@
     </div>
 
 <div class="text-end mb-3">
-    <a href="{{ route('user.create') }}" type="button" class="btn btn-primary">
-        Tambah Pengguna
+    <a href="{{ route('harilibur.create') }}" type="button" class="btn btn-primary">
+        Tambah Hari Libur
     </a>
 </div>
 
@@ -41,44 +41,32 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Profile</th>
-                                <th>Nama Lengkap</th>
-                                <th>NIG</th>
-                                <th>No Hp</th>
-                                <th>Bidang</th>
-                                <th>Tahun Masuk</th>
-                                <th>TTL</th>
-                                <th>Alamat Lengkap</th>
-                                <th>Role</th>
+                                <th>Tgl Mulai</th>
+                                <th>Tgl Selesai</th>
+                                <th>Keterangan</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($users as $user)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td><img src="{{ asset('assets/images/profile/' . $user->image) }}" alt="img" width="100" style="object-fit: cover;"></td>
-                                <td>{{ $user->nama_lengkap }}</td>
-                                <td>{{ $user->nig }}</td>
-                                <td>{{ $user->no_hp }}</td>
-                                <td>{{ $user->bidang }}</td>
-                                <td>{{ $user->tahun_masuk }}</td>
-                                <td>{{ $user->ttl }}</td>
-                                <td>{{ $user->alamat_lengkap }}</td>
-                                <td>{{ $user->role }}</td>
-                                <td>
-                                    <a href="{{ route('user.edit', $user->slug) }}" class="text-primary" style="display: inline-block; vertical-align: middle;">
+                            @foreach ($hari_liburs as $hl)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $hl->tgl_mulai }}</td>
+                                    <td>{{ $hl->tgl_selesai }}</td>
+                                    <td>{{ $hl->keterangan }}</td>
+                                    <td>
+                                        <a href="{{ route('harilibur.edit', $hl->slug) }}" class="text-primary" style="display: inline-block; vertical-align: middle;">
                                         <i class="bi bi-pencil-square fs-4"></i>
                                     </a>
-                                    <form action="{{ route('user.delete', $user->id) }}" method="POST" onsubmit="return confirm('User akan dihapus yakin?')" style="display: inline-block; vertical-align: middle; margin: 0;">
+                                    <form action="{{ route('harilibur.delete', $hl->id) }}" method="POST" onsubmit="return confirm('Hari Libur akan dihapus yakin?')" style="display: inline-block; vertical-align: middle; margin: 0;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn p-0 text-danger border-0 bg-transparent">
                                             <i class="bi bi-trash-fill fs-4"></i>
                                         </button>
                                     </form>
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>

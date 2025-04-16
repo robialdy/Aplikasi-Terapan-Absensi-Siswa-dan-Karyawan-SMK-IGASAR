@@ -65,6 +65,9 @@ class AbsensiKelasController extends Controller
         foreach($status as $index => $st) {
             // buat nyimpen id di jadwal_kehadiran
             $kehadiranSiswa = Kehadiran::where('id_user', $id_siswa[$index])->where('tanggal', date('Y-m-d'))->first();
+            if (!$kehadiranSiswa) {
+                $kehadiranSiswa = null;
+            }
 
             // update tidak hadir
             if ($st == 'Sakit' || $st == 'Izin' || $st == 'Alpa') {
@@ -81,7 +84,11 @@ class AbsensiKelasController extends Controller
             } elseif ($st == 'Dispensasi') {
                 $kehadiranSiswa = null;
             } else {
-                $kehadiranSiswa = $kehadiranSiswa->id;
+                if (!$kehadiranSiswa) {
+                    $kehadiranSiswa = null;
+                } else {
+                    $kehadiranSiswa = $kehadiranSiswa->id;
+                }
             }
 
             Jadwal_Kehadiran::create([

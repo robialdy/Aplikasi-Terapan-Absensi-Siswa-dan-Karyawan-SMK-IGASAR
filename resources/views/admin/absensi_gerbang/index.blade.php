@@ -36,10 +36,19 @@
                 <h4 class="card-title">Absensi Gerbang</h4>
             </div>
             <div class="card-body">
+                <form method="POST" action="{{ route('absensigerbang.store') }}" id="scanForm">
+                    @csrf
+                    <input type="hidden" name="id_user" id="id_user">
+
+                    <input type="text" id="scanInput"
+                    autofocus
+                    onkeydown="handleScan(event)"
+                    style="opacity:0; position:absolute; z-index:-1;" tabindex="-1">
+                </form>
                 <form action="{{ route('absensigerbang.store') }}" method="POST">
                     @csrf
                 <div class="form-group">
-                    <select name="id_user" id="id_siswa" class="form-control form-control-lg choices" required autofocus>
+                    <select name="id_user" id="id_siswa" class="form-control form-control-lg choices" required>
                         <option value="" selected disabled>Pilih Nama Anda</option>
                         @foreach ($siswa as $s)
                             <option value="{{ $s->id_user }}">{{ $s->siswa->nama_lengkap }} - {{ $s->kelas->nama_kelas }}</option>
@@ -88,6 +97,65 @@
             </div>
         </div>
     </div>
+
+    <script>
+    // Fokuskan input setiap kali halaman selesai dimuat
+    window.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('scanInput').focus();
+    });
+
+    // Saat user klik di mana pun, tetap kembalikan fokus ke input
+    document.addEventListener('click', () => {
+        document.getElementById('scanInput').focus();
+    });
+
+    // Opsional: saat user tekan tombol apa pun, tetap fokus
+    document.addEventListener('keydown', () => {
+        document.getElementById('scanInput').focus();
+    });
+</script>
+
+
+<script>
+    function handleScan(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            let raw = e.target.value.trim();
+
+            // 1. Temukan posisi karakter `{` (awal JSON)
+            const jsonStart = raw.indexOf('{');
+            if (jsonStart === -1) {
+                alert("Data scan tidak valid (tidak ada JSON)");
+                return;
+            }
+
+            // 2. Ambil substring mulai dari karakter `{`
+            const jsonText = raw.substring(jsonStart);
+
+            try {
+                const data = JSON.parse(jsonText);
+
+                // 3. Ambil id dari JSON, bisa id atau id_user
+                const userId = data.id_user ?? data.id;
+
+                if (userId) {
+                    document.getElementById('id_user').value = userId;
+                    document.getElementById('scanForm').submit();
+                } else {
+                    alert("ID user tidak ditemukan di dalam JSON");
+                }
+            } catch (err) {
+                alert("Gagal membaca JSON hasil scan");
+                console.error("Data raw:", raw);
+                console.error("Potongan JSON:", jsonText);
+            }
+
+            e.target.value = ''; // Kosongkan input setelah scan
+        }
+    }
+</script>
+
+
 </div>
 
 

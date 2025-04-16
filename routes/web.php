@@ -3,6 +3,7 @@
 use App\Http\Controllers\admin\AbsensiGerbangController;
 use App\Http\Controllers\admin\AbsensiKelasController as AdminAbsensiKelasController;
 use App\Http\Controllers\admin\JadwalController;
+use App\Http\Controllers\admin\LaporanController;
 use App\Http\Controllers\kurikulum\JadwalController as KurikulumJadwalController;
 use App\Http\Controllers\admin\KelasController;
 use App\Http\Controllers\admin\RiwayatKelasController;
@@ -153,6 +154,13 @@ Route::middleware(['auth', 'role:Admin'])->group(function(){
             // absensi_kelas
             Route::get('{id_kelas}', [AdminAbsensiKelasController::class, 'absensi'])->name('absensikelas.absensi.admin');
             Route::get('{id_kelas}/{id_user}', [AdminAbsensiKelasController::class, 'absensi_siswa'])->name('absensikelas.absensisiswa.admin');
+        });
+
+        // LAPORAN
+        Route::prefix('laporan',)->group(function(){
+            Route::get('', [LaporanController::class, 'index'])->name('laporan');
+            Route::post('/laporan/export-pdf', [LaporanController::class, 'exportPdf'])->name('laporan.export-pdf');
+            Route::post('/laporan/export-excel', [LaporanController::class, 'exportExcel'])->name('laporan.export-excel');
         });
     });
 });

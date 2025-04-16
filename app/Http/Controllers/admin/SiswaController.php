@@ -171,7 +171,7 @@ class SiswaController extends Controller
         ];
         $qrData = json_encode($data);
 
-        $qrCode = QrCode::format('svg')->size(200)->generate($qrData);
+        $qrCode = QrCode::format('svg')->size(500)->generate($qrData);
 
         $qrfileName = time() . '.svg';
         $qrCodePath = public_path('assets/images/qrcode/' . $qrfileName);
