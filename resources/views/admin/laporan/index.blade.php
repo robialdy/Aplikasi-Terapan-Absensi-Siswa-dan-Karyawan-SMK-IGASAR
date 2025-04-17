@@ -21,100 +21,24 @@
     </div>
 
 
-    <div class="container">
-
+    <section class="section">
         <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-3">
+                    Pilih Kelas
+                </h5>
+            </div>
             <div class="card-body">
 
-                <form id="form-laporan" method="post" action="{{ route('laporan.export-pdf') }}">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="type">Jenis Laporan</label>
-                        <select name="type" id="type" class="form-control" required>
-                            <option value="">-- Pilih Jenis --</option>
-                            <option value="harian">Harian</option>
-                            <option value="bulanan">Bulanan</option>
-                            <option value="semester">Semester</option>
-                        </select>
-                    </div>
-
-                    {{-- HARiAN --}}
-                    <div class="mb-3 d-none" id="harian-group">
-                        <label for="tanggal">Tanggal</label>
-                        <input type="date" name="tanggal" id="tanggal" class="form-control">
-                    </div>
-
-                    {{-- BULANAN --}}
-                    <div class="row d-none" id="bulanan-group">
-                        <div class="col-md-6 mb-3">
-                            <label for="bulan">Bulan</label>
-                            <select name="bulan" id="bulan" class="form-control">
-                                @for ($i = 1; $i <= 12; $i++)
-                                    <option value="{{ $i }}">{{ DateTime::createFromFormat('!m', $i)->format('F') }}</option>
-                                @endfor
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="tahun">Tahun</label>
-                            <input type="number" name="tahun" id="tahun" class="form-control" value="{{ date('Y') }}">
-                        </div>
-                    </div>
-
-                    {{-- SEMESTER --}}
-                    <div class="row d-none" id="semester-group">
-                        <div class="col-md-6 mb-3">
-                            <label for="start">Tanggal Mulai</label>
-                            <input type="date" name="start" id="start" class="form-control">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="end">Tanggal Selesai</label>
-                            <input type="date" name="end" id="end" class="form-control">
-                        </div>
-                    </div>
-
-                <div class="d-flex gap-2">
-                    <button type="button" class="btn btn-success" onclick="submitForm('excel')">Export Excel</button>
-                    <button type="button" class="btn btn-danger" onclick="submitForm('pdf')">Export PDF</button>
+                <div class="list-group">
+                    @foreach ($kelas as $k)
+                    <a href="{{ route('laporan.jenis', $k->id) }}" class="list-group-item list-group-item-action">{{ $k->nama_kelas }}</a>
+                    @endforeach
                 </div>
-
-                </form>
-
 
             </div>
         </div>
-</div>
 
-<script>
-    const typeSelect = document.getElementById('type');
-    const harianGroup = document.getElementById('harian-group');
-    const bulananGroup = document.getElementById('bulanan-group');
-    const semesterGroup = document.getElementById('semester-group');
-    const form = document.getElementById('form-laporan');
-
-    typeSelect.addEventListener('change', function () {
-        harianGroup.classList.add('d-none');
-        bulananGroup.classList.add('d-none');
-        semesterGroup.classList.add('d-none');
-
-        if (this.value === 'harian') {
-            harianGroup.classList.remove('d-none');
-        } else if (this.value === 'bulanan') {
-            bulananGroup.classList.remove('d-none');
-        } else if (this.value === 'semester') {
-            semesterGroup.classList.remove('d-none');
-        }
-    });
-
-    function submitForm(format) {
-        if (format === 'excel') {
-            form.action = "{{ route('laporan.export-excel') }}";
-        } else {
-            form.action = "{{ route('laporan.export-pdf') }}";
-        }
-
-        form.submit(); // <-- Submit secara manual setelah ubah action
-    }
-</script>
-
+    </section>
 
 @endsection

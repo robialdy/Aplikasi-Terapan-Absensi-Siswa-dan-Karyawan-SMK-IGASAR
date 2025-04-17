@@ -158,8 +158,12 @@ Route::middleware(['auth', 'role:Admin'])->group(function(){
 
         // LAPORAN
         Route::prefix('laporan',)->group(function(){
+            // pilih kelas
             Route::get('', [LaporanController::class, 'index'])->name('laporan');
-            Route::post('/laporan/export-pdf', [LaporanController::class, 'exportPdf'])->name('laporan.export-pdf');
+            // pilih jenis laporan
+            Route::get('{id_kelas}', [LaporanController::class, 'laporan'])->name('laporan.jenis');
+            // proses
+            Route::post('/laporan/export-pdf/{id_kelas}', [LaporanController::class, 'exportPdf'])->name('laporan.export-pdf');
             Route::post('/laporan/export-excel', [LaporanController::class, 'exportExcel'])->name('laporan.export-excel');
         });
     });
