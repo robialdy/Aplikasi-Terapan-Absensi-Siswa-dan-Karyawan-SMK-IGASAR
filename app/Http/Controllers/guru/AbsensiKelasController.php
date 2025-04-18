@@ -106,7 +106,7 @@ class AbsensiKelasController extends Controller
                     $kehadiran = Kehadiran::create([
                         'id_user' => $id_siswa[$index],
                         'tanggal' => date('Y-m-d'),
-                        'jam' => date('H:i:s'),
+                        'datang_pukul' => date('H:i:s'),
                         'status' => 'Masuk'
                     ]);
                     $kehadiranSiswa = $kehadiran->id;
