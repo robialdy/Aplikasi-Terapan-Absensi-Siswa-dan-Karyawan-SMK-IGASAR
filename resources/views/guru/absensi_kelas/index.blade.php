@@ -76,4 +76,37 @@
     </section>
 
 
+    @if ($libur)
+    <div class="modal fade text-left" id="backdrop" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel4" data-bs-backdrop="false" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel4">Absensi Libur Hari Ini</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        {{ $libur->keterangan }}
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <a href="{{ route('dashboard.guru') }}" class="btn btn-primary ms-1">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Kembali</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    window.onload = function () {
+        var myModal = new bootstrap.Modal(document.getElementById('backdrop'));
+        myModal.show();
+    };
+    </script>
+    @endif
+
+
+
 @endsection

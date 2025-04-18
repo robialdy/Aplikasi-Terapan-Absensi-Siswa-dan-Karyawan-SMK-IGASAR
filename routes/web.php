@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\AbsensiGerbangController;
+use App\Http\Controllers\admin\AbsensiGuruController;
 use App\Http\Controllers\admin\AbsensiKelasController as AdminAbsensiKelasController;
 use App\Http\Controllers\admin\JadwalController;
 use App\Http\Controllers\admin\LaporanController;
@@ -154,6 +155,15 @@ Route::middleware(['auth', 'role:Admin'])->group(function(){
             // absensi_kelas
             Route::get('{id_kelas}', [AdminAbsensiKelasController::class, 'absensi'])->name('absensikelas.absensi.admin');
             Route::get('{id_kelas}/{id_user}', [AdminAbsensiKelasController::class, 'absensi_siswa'])->name('absensikelas.absensisiswa.admin');
+        });
+
+        Route::prefix('absensi-guru')->group(function() {
+            // PILIH guru
+            Route::get('', [AbsensiGuruController::class, 'index'])->name('absensiguru');
+            //pilih tanggal
+            Route::get('{id_guru}', [AbsensiGuruController::class, 'tanggal'])->name('absensiguru.tanggal');
+            // tampilkan
+            Route::get('{nig}/{tanggal}', [AbsensiGuruController::class, 'absensi'])->name('absensiguru.absensi');
         });
 
         // LAPORAN

@@ -61,10 +61,17 @@
                 </a>
             </li>
 
-            <li class="sidebar-item {{ request()->is('admin/absensi-kelas*') ? 'active' : '' }}">
+            <li class="sidebar-item {{ request()->is('admin/absensi-guru*') ? 'active' : '' }}">
                 <a href="{{ route('absensikelas.admin') }}" class='sidebar-link'>
                     <i class="bi bi-check2-square"></i>
                     <span>Track Absensi Kelas</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item {{ request()->is('admin/absensi-kelas*') ? 'active' : '' }}">
+                <a href="{{ route('absensiguru') }}" class='sidebar-link'>
+                    <i class="bi bi-check2-square"></i>
+                    <span>Track Absensi Guru</span>
                 </a>
             </li>
 
@@ -112,9 +119,9 @@
                 </p>
 
                 <ul class="submenu">
-                    {{-- <li class="submenu-item {{ request()->is('admin/hari-libur*') ? 'active' : '' }}">
+                    <li class="submenu-item {{ request()->is('admin/hari-libur*') ? 'active' : '' }}">
                         <a href="{{ route('harilibur') }}" class="submenu-link">Hari Libur</a>
-                    </li> --}}
+                    </li>
                     <li class="submenu-item {{ request()->is('admin/mata-pelajaran*') ? 'active' : '' }}">
                         <a href="{{ route('matapelajaran') }}" class="submenu-link">Mata Pelajaran</a>
                     </li>

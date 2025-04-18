@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\guru;
 
+use App\Models\Hari_Libur;
 use App\Models\Users;
 use App\Models\Jadwal;
 use App\Models\Kehadiran;
@@ -19,7 +20,8 @@ class AbsensiKelasController extends Controller
 
         $data = [
             'title' => 'Absensi Kelas',
-            'jadwal' => Jadwal::where('id_user', Auth::user()->id)->get()
+            'jadwal' => Jadwal::where('id_user', Auth::user()->id)->get(),
+            'libur' => Hari_Libur::where('tgl_mulai', '<=', date('Y-m-d'))->where('tgl_selesai', '>=', date('Y-m-d'))->first(),
         ];
 
 
@@ -71,21 +73,43 @@ class AbsensiKelasController extends Controller
 
             // update tidak hadir
             if ($st == 'Sakit' || $st == 'Izin' || $st == 'Alpa') {
-                $kehadiran = Kehadiran::create([
-                    'id_user' => $id_siswa[$index],
-                    'tanggal' => date('Y-m-d'),
-                    'status' => $st
-                ]);
+                if (Kehadiran::where('id_user', $id_siswa[$index])->where('tanggal', date('Y-m-d'))->first()) {
+                    $kehadiran_user = Kehadiran::where('id_user', $id_siswa[$index])->where('tanggal', date('Y-m-d'))->first();
+                    $kehadiran = $kehadiran_user->id;
+                } else {
+                    $kehadiran = Kehadiran::create([
+                        'id_user' => $id_siswa[$index],
+                        'tanggal' => date('Y-m-d'),
+                        'status' => $st
+                    ]);
+                    $kehadiran = $kehadiran->id;
+                }
             }
 
             // di null in
             if($st != 'Masuk' && $st != 'Dispensasi' ) {
-                $kehadiranSiswa = $kehadiran->id;
+                $kehadiranSiswa = $kehadiran;
             } elseif ($st == 'Dispensasi') {
-                $kehadiranSiswa = null;
+                if (Kehadiran::where('id_user', $id_siswa[$index])->where('tanggal', date('Y-m-d'))->first()) {
+                    $kehadiran_user = Kehadiran::where('id_user', $id_siswa[$index])->where('tanggal', date('Y-m-d'))->first();
+                    $kehadiranSiswa = $kehadiran_user->id;
+                } else {
+                    $kehadiran = Kehadiran::create([
+                        'id_user' => $id_siswa[$index],
+                        'tanggal' => date('Y-m-d'),
+                        'status' => 'Izin'
+                    ]);
+                    $kehadiranSiswa = $kehadiran->id;
+                }
             } else {
                 if (!$kehadiranSiswa) {
-                    $kehadiranSiswa = null;
+                    $kehadiran = Kehadiran::create([
+                        'id_user' => $id_siswa[$index],
+                        'tanggal' => date('Y-m-d'),
+                        'jam' => date('H:i:s'),
+                        'status' => 'Masuk'
+                    ]);
+                    $kehadiranSiswa = $kehadiran->id;
                 } else {
                     $kehadiranSiswa = $kehadiranSiswa->id;
                 }
