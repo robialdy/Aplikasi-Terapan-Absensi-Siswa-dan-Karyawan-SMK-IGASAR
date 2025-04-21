@@ -9,6 +9,7 @@ use App\Http\Controllers\kurikulum\JadwalController as KurikulumJadwalController
 use App\Http\Controllers\admin\KelasController;
 use App\Http\Controllers\admin\RiwayatKelasController;
 use App\Http\Controllers\walikelas\RiwayatKelasController as WalikelasRiwayatKelasController;
+use \App\Http\Controllers\guru\LaporanController as GuruLaporanController;
 use App\Http\Controllers\admin\ScannerController;
 use App\Http\Controllers\admin\SiswaController;
 use App\Http\Controllers\AuthController;
@@ -174,7 +175,6 @@ Route::middleware(['auth', 'role:Admin'])->group(function(){
             Route::get('{id_kelas}', [LaporanController::class, 'laporan'])->name('laporan.jenis');
             // proses
             Route::post('/laporan/export-pdf/{id_kelas}', [LaporanController::class, 'exportPdf'])->name('laporan.export-pdf');
-            Route::post('/laporan/export-excel', [LaporanController::class, 'exportExcel'])->name('laporan.export-excel');
         });
     });
 });
@@ -204,6 +204,17 @@ Route::middleware(['auth', 'role:Guru/Karyawan'])->group(function () {
             Route::put('update/{id}', [GuruUserController::class, 'update'])->name('guru.user.update');
             // delete
             Route::delete('delete/{id}', [GuruUserController::class, 'delete'])->name('guru.user.delete');
+        });
+        // REPORT
+        Route::prefix('laporan')->group(function(){
+            // pilih mapel
+            Route::get('', [GuruLaporanController::class, 'index'])->name('guru.laporan');
+            // pilih kelas
+            Route::get('{id_mapel}', [GuruLaporanController::class, 'kelas'])->name('guru.laporan.kelas');
+            // pilih periode
+            Route::get('{id_mapel}/{id_kelas}', [GuruLaporanController::class, 'laporan'])->name('guru.laporan.mapel');
+            // export
+            Route::post('{id_mapel}/{id_kelas}/export', [GuruLaporanController::class, 'export'])->name('guru.laporan.export');
         });
     });
 });

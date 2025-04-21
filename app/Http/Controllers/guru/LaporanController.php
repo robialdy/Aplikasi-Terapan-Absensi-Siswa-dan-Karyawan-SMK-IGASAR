@@ -1,10 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\guru;
 
 use App\Http\Controllers\Controller;
+use App\Models\Jadwal;
 use App\Models\Kelas;
+use App\Models\Mata_Pelajaran;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 
@@ -12,39 +16,52 @@ class LaporanController extends Controller
 {
     public function index()
     {
-        $data = [
-            'title' => 'Laporan',
-            'kelas' => Kelas::get(),
+        $data  = [
+            'title' => 'Laporan Mata Pelajaran',
+            'mapel' => Jadwal::where('id_user', Auth::user()->id)->get(),
         ];
-        return view('admin.laporan.index', $data);
+        return view('guru.laporan.index', $data);
     }
 
-    public function laporan($id_kelas)
+    public function kelas($id_mapel)
     {
         $data = [
-            'title' => 'Jenis Laporan',
-            'kelas' => Kelas::where('id', $id_kelas)->firstOrFail(),
+            'title' => 'Pilih Kelas',
+            'kelas' => Jadwal::where('id_mata_pelajaran', $id_mapel)->select('id_kelas')->distinct()->get(),
         ];
-        return view('admin.laporan.laporan', $data);
+        return view('guru.laporan.kelas', $data);
     }
 
-    public function exportPdf(Request $request, $id_kelas)
+    public function laporan($id_mapel, $id_kelas)
+    {
+        $data = [
+            'title' => 'Pilih Jenis Laporan',
+            'mapel' => Mata_Pelajaran::where('id', $id_mapel)->first(),
+        ];
+        return view('guru.laporan.laporan', $data);
+    }
+
+    public function export(Request $request, $id_mapel, $id_kelas)
     {
         $filter = $request->only(['type', 'tanggal', 'bulan', 'tahun', 'start', 'end']);
 
-        $query = DB::table('kehadiran as h')
+        $query = DB::table('jadwal_kehadiran as ad')
+            ->join('kehadiran as h', 'ad.id_kehadiran', '=', 'h.id')
             ->join('users as u', 'h.id_user', '=', 'u.id')
             ->join('riwayat_kelas as rk', 'rk.id_user', '=', 'u.id')
             ->join('kelas as k', 'rk.id_kelas', '=', 'k.id')
+            ->join('jadwal as j', 'ad.id_jadwal', '=', 'j.id')
             ->select(
+                'u.id as id_user',
                 'u.nama_lengkap',
                 'u.nis',
                 'u.nisn',
-                'h.status',
-                'h.id_user'
+                'ad.status'
             )
-            ->where('k.id', $id_kelas);
-        // filter periode
+            ->where('j.id_mata_pelajaran', $id_mapel)
+            ->where('k.id', $id_kelas); // filter berdasarkan kelas
+
+        // Filter periode
         if ($filter['type'] == 'harian') {
             $query->whereDate('h.tanggal', $filter['tanggal']);
             $periode = 'Tanggal: ' . date('d-m-Y', strtotime($filter['tanggal']));
@@ -65,7 +82,6 @@ class LaporanController extends Controller
         $rekap = [];
         foreach ($data as $row) {
             $id = $row->id_user;
-
             if (!isset($rekap[$id])) {
                 $rekap[$id] = [
                     'nama_lengkap' => $row->nama_lengkap,
@@ -98,29 +114,50 @@ class LaporanController extends Controller
             }
         }
 
-        //presentase
+        // Hitung persentase
         foreach ($rekap as &$r) {
             $total = $r['masuk'] + $r['sakit'] + $r['izin'] + $r['alpa'] + $r['dispensasi'];
             $r['jumlah'] = $total;
             $r['persentase'] = $total ? round(($r['masuk'] / $total) * 100, 2) . '%' : '0%';
         }
 
-        // $data = [
-        //     'data' => $rekap,
-        //     'periode' => $periode
-        // ];
+        if ($filter['type'] == 'harian') {
+            $jumlahPertemuan = DB::table('jadwal_kehadiran as ad')
+                ->join('kehadiran as h', 'ad.id_kehadiran', '=', 'h.id')
+                ->join('jadwal as j', 'ad.id_jadwal', '=', 'j.id')
+                ->where('j.id_mata_pelajaran', $id_mapel)
+                ->where('j.id_kelas', $id_kelas)
+                ->whereDate('h.tanggal', $filter['tanggal']) // batasi hanya hari itu
+                ->select(DB::raw('DATE(h.tanggal) as tanggal'))
+                ->get()
+                ->pluck('tanggal')
+                ->unique()
+                ->count();
+        } else {
+            // Hitung jumlah pertemuan
+            $jumlahPertemuan = DB::table('jadwal_kehadiran as ad')
+                ->join('kehadiran as h', 'ad.id_kehadiran', '=', 'h.id')
+                ->join('jadwal as j', 'ad.id_jadwal', '=', 'j.id')
+                ->join('users as u', 'h.id_user', '=', 'u.id')
+                ->join('riwayat_kelas as rk', 'rk.id_user', '=', 'u.id')
+                ->join('kelas as k', 'rk.id_kelas', '=', 'k.id')
+                ->where('j.id_mata_pelajaran', $id_mapel)
+                ->where('k.id', $id_kelas)
+                ->select(DB::raw('DATE(h.tanggal) as tanggal'))
+                ->distinct()
+                ->count('tanggal');
+        }
 
-        // dd($data);
-
-
-        $pdf = Pdf::loadView('admin.laporan.absensi_pdf', [
+        // Buat PDF
+        $pdf = Pdf::loadView('guru.laporan.laporan_pdf', [
             'data' => $rekap,
             'periode' => $periode,
-            'kelas' => Kelas::where('id', $id_kelas)->first(),
-            'walikelas' => Kelas::where('id', $id_kelas)->first(),
-            'type' => $filter['type']
+            'mapel' => Mata_Pelajaran::find($id_mapel),
+            'kelas' => Kelas::find($id_kelas),
+            'type' => $filter['type'],
+            'jumlahPertemuan' => $jumlahPertemuan
         ]);
 
-        return $pdf->download('laporan-absensi.pdf');
+        return $pdf->download('laporan-absensi-mapel.pdf');
     }
 }

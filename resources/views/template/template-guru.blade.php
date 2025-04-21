@@ -67,6 +67,12 @@
                     <span>Form Tidak Hadir</span>
                 </a>
             </li>
+            <li class="sidebar-item {{ request()->is('guru/laporan*') ? 'active' : '' }}">
+                <a href="{{ route('guru.laporan') }}" class='sidebar-link'>
+                    <i class="bi bi-grid-fill"></i>
+                    <span>Laporan</span>
+                </a>
+            </li>
 
         </ul>
     </div>
