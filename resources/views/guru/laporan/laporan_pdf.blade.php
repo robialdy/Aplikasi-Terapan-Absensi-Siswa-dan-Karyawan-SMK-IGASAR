@@ -86,20 +86,21 @@
 
 
 
-    <div class="periode">
+<div style="text-align: center; margin-bottom: 15px;">
+    <strong>Rekap Absensi</strong>
+</div>
         <div style="text-align: start">
-            Jumlah Pertemuan:</strong> {{ $jumlahPertemuan }}
+            Mata Pelajaran: {{ $mapel->nama_pelajaran }}
         </div>
         <div style="text-align: start">
-            Rekap Absensi - {{ $mapel->nama_pelajaran }}
+            Jumlah Pertemuan: {{ $jumlahPertemuan }}
         </div>
         <div style="text-align: start">
-            {{ $kelas->nama_kelas }}
+            Kelas: {{ $kelas->nama_kelas }}
         </div>
-        <div style="text-align: end">
+        <div style="text-align: start; margin-bottom: 10px;">
             {{ $periode }}
         </div>
-    </div>
 
     <table class="tabel-absensi">
             <thead>

@@ -82,17 +82,17 @@
 
 <hr style="border: 1px solid #000; margin: 10px 0;">
 
+<div style="text-align: center; margin-bottom: 15px;">
+    <strong>Rekap Absensi</strong>
+</div>
 
-
-    <div class="periode">
         <div style="text-align: start">
 
-            {{ $kelas->nama_kelas }}
+            Kelas: {{ $kelas->nama_kelas }}
         </div>
-        <div style="text-align: end">
+        <div style="text-align: start; margin-bottom: 10px;">
             {{ $periode }}
         </div>
-    </div>
 
     <table class="tabel-absensi">
             <thead>
